@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mapbox layer switcher</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src='http://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.js'></script>
+	<link href='http://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.css' rel='stylesheet' />
+	<!--[if lte IE 8]>
+		<link href='htpp://api.tiles.mapbox.com/mapbox.js/v1.6.1/mapbox.ie.css' rel='stylesheet' >
+	<![endif]-->
+	<style>
+		body { margin:0; padding:0; }
+		#map { position:absolute; top:0; bottom:0; width:100%; }
+		#switcher { position:absolute; top:15px; right:15px; width:140px; height:auto; z-index:30; background-color:rgba(100,100,100,0.8); padding:10px; font-family:arial; padding-right:0px;opacity:0;transition:all 0.35s; }
+		#switcher:hover{opacity:1;transition:all 0.35s; }
+		#switcher a { color:#FFF; text-decoration:none; display:block;font-size:13px;margin-left:5px;margin-bottom:2px;font-weight:normal; }
+		#switcher a:visited { color:white; }
+		h5 { padding:0; margin:0; color:white; font-weight:bold; margin-bottom:12px; font-size:14px; }
+		h6 { padding:0; margin:0; color:white; font-weight:bold; margin-bottom:4px; margin-top:2px;font-size:15px; }
+		h6#terrain{color:#65dc5b}
+		h6#streets{color:#88c5c8}
+		h6#satellite{color:#ecd73b}
+		h6#autres{color:#ff90e2}
+		#terrain .active { color:#3cce41!important }
+		#streets .active { color:#4fcbff!important }
+		#satellite .active { color:#ffec00!important }
+		#autres .active { color:#ff95f5!important }
+	</style>
+</head>
+<body>
+	<div id='map'></div>
+	<div id="switcher">
+		<h5>Fonds de carte :</h5>
+		
+		<h6 id="terrain">Terrain
+			<a class="baselayer active" data-mapid="examples.map-9ijuk24y" href="#">Terrain</a>
+			<a class="baselayer" data-mapid="examples.map-qogxobv1" href="#">Terrain light</a>
+			<a class="baselayer" data-mapid="examples.map-9d0r2yso" href="#">Terrain N&B </a>
+		</h6>
+		
+		<h6 id="streets">Streets
+			<a class="baselayer" data-mapid="examples.map-dev-fr" href="#">Streets</a>
+			<a class="baselayer" data-mapid="examples.map-20v6611k" href="#">Street gris</a>
+			<a class="baselayer" data-mapid="mapbox.world-light" href="#">World light</a>
+			<a class="baselayer" data-mapid="examples.map-cnkhv76j" href="#">Streets noir</a>
+			<a class="baselayer" data-mapid="examples.map-0l53fhk2" href="#">Streets noir II</a>
+		</h6>
+		
+		<h6 id="satellite">Satellite
+			<a class="baselayer" data-mapid="examples.map-b70jh5xu" href="#">Satellite</a>
+			<a class="baselayer" data-mapid="examples.map-qfyrx5r8" href="#">Satellite (labels)</a>
+			<a class="baselayer" data-mapid="mapbox.blue-marble-topo-bathy-jul" href="#">Blue marble</a>
+		</h6>
+		
+		<h6 id="autres">Autres
+			<a class="baselayer" data-mapid="examples.c7d2024a" href="#">Open Street Map</a>
+			<a class="baselayer" data-mapid="examples.a3cad6da" href="#">Ancien style</a>
+			<a class="baselayer" data-mapid="examples.map-51f69fea" href="#">Comics</a>
+			<a class="baselayer" data-mapid="examples.map-3gisupiu" href="#">Streets vert</a>
+			<a class="baselayer" data-mapid="examples.fb8f9523" href="#">Bordeaux noir</a>
+			<a class="baselayer" data-mapid="examples.bc17bb2a" href="#">Comics 2</a>
+			<a class="baselayer" data-mapid="mapbox.geography-class" href="#">Geography class</a>
+			<a class="baselayer" data-mapid="mapbox.natural-earth-hypso-bathy" href="#">Nature</a>
+		</h6>			
+	</div>
+	
+	<script type='text/javascript'>
+		var carte=L.mapbox.map('map').setView([46.7,2.3],6).addControl(L.mapbox.geocoderControl('examples.map-9ijuk24y'));
+		var groupe = L.geoJson().addTo(carte);
+		groupe.addLayer(L.mapbox.tileLayer('examples.map-9ijuk24y'));
+		$('#switcher .baselayer').on('click',function(){
+			$loc = $(this);
+			$('#switcher .baselayer').removeClass('active');
+			$loc.addClass('active');
+			
+			groupe.clearLayers();
+			groupe.addLayer(L.mapbox.tileLayer($loc.data('mapid')));
+
+			
+		});
+	</script>
+</body>
+</html>
+
